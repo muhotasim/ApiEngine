@@ -1,0 +1,32 @@
+const columns = [
+    { label: "Title", column: "id", type: "data" },
+    { label: "Content", column: "name", type: "data" },
+    { label: "Actions", column: "action", type: "node" },
+];
+
+const datas=[
+    {id:1,name:"fuad",action:[
+            {className:"btn btn-sm btn-primary",id:"_edit",label:"<i class='fa fa-edit'></i>",data:{id:1}}
+        ]},
+    {id:2,name:"fuad 1",action:[
+
+            {className:"btn btn-sm btn-primary",id:"_edit",label:"<i class='fa fa-edit'></i>",data:{id:2}}
+        ]},
+    {id:3,name:"fuad 3",action:[
+            {className:"btn btn-sm btn-primary",id:"_edit",label:"<i class='fa fa-edit'></i>",data:{id:2}},
+            {className:"btn btn-sm btn-primary",id:"_delete",label:"<i class='fa fa-trash'></i>",data:{id:2}},
+        ]},
+    {id:4,name:"fuad 4",action:[]},
+    {id:5,name:"fuad 5",action:[]},
+    {id:6,name:"fuad 6",action:[]},
+];
+
+props
+exports={true} ref={"table"}
+                       columns={columns}
+                       onParamsChange={this._onParamsChange}
+                       TotalPage={this.state.TotalPage}
+                       widths={widths}
+    exports=true
+   ExportFields:["Category Label","Category Name"],
+   ExportFieldsId:["categoryLabel","categoryName"],

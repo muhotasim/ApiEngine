@@ -1,0 +1,9 @@
+.page{
+padding-top: 50px;
+    transition-duration: .4s;
+}
+label {
+    display: inline-block;
+    margin-bottom: .5rem;
+    font-weight: 500;
+}

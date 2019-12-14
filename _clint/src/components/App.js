@@ -1,0 +1,82 @@
+import React from 'react';
+import {connect} from 'react-redux';
+import Login from '../general/Login.comp';
+import {logout, setLoginData} from '../actions/User.action';
+import {setSettings} from '../actions/Setting.action';
+import {getCookie, tokenDencoder} from '../utils/common.func';
+import {HashRouter, Route} from 'react-router-dom';
+import mainmenu from '../constents/mainmenu';
+
+import Topmenu from '../general/Topmenu';
+
+
+import Dashboard from './pages/Dashboard';
+import { hot } from 'react-hot-loader';
+
+//------------- end import pages ---------------
+
+class App extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            sidebarOpen: false
+        };
+        this._sidebarToggle = this._sidebarToggle.bind(this);
+    }
+
+    UNSAFE_componentWillMount() {
+        const {_setSetting} = this.props;
+        if (getCookie("tokenData") != null) {
+            const data = JSON.parse(tokenDencoder(getCookie("tokenData")));
+            _setSetting(data);
+        } else {
+
+        }
+    }
+
+    componentDidMount() {
+
+    }
+
+    _sidebarToggle() {
+        const {sidebarOpen} = this.state;
+        this.setState({sidebarOpen: !sidebarOpen});
+    }
+
+    render() {
+        const {_login, userStore} = this.props;
+        const {_sidebarToggle} = this;
+        const {sidebarOpen} = this.state;
+
+        if (userStore.loginData == null) {
+            return <Login onClickLogin={_login}/>
+        } else {
+            return (<div>
+                <HashRouter>
+                    <div>
+                        <Topmenu sidebarToggle={_sidebarToggle} menus={mainmenu}/>
+                        <div className="app-holder">
+                                <div className="container">
+                                    <Route exact path="/" component={Dashboard}/>
+                                </div>
+                        </div>
+                    </div>
+                </HashRouter>
+            </div>);
+        }
+    }
+}
+
+const mapStateToProps = (state) => {
+    return {
+        userStore: state.UserStore
+    }
+};
+const mapDispatchToProps = (dispatch) => {
+    return {
+        _login: (u, p) => dispatch(setLoginData(u, p)),
+        _setSetting: (d) => dispatch(setSettings(d)),
+        _logout: () => dispatch(logout())
+    }
+};
+export default hot(module)(connect(mapStateToProps, mapDispatchToProps)(App));

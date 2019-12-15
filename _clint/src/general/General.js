@@ -22,6 +22,12 @@ export const Header = (props) => {
     </div>
 };
 
+export const Loader = (props) => {
+    return <div className="text-center">
+        <i className="fa fa-refresh fa-spin"></i> <span>Please Wait</span>
+    </div>
+};
+
 export const uuid = (i = 0) => {
     return "x" + i + rendomString() + new Date().getTime() + rendomString() + rendomString()
 };

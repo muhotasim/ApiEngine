@@ -11,6 +11,9 @@ import Topmenu from '../general/Topmenu';
 
 
 import Dashboard from './pages/Dashboard';
+import Modules from "./pages/Modules";
+import ModuleCreate from "./pages/Modules/create";
+
 import { hot } from 'react-hot-loader';
 
 //------------- end import pages ---------------
@@ -56,8 +59,12 @@ class App extends React.Component {
                     <div>
                         <Topmenu sidebarToggle={_sidebarToggle} menus={mainmenu}/>
                         <div className="app-holder">
-                                <div className="container">
+                                <div className="container" style={{paddingTop:"50px"}}>
+                                   
                                     <Route exact path="/" component={Dashboard}/>
+                                    <Route exact path="/Modules" component={Modules}/>
+                                    <Route exact path="/Module/Create" component={ModuleCreate}/>
+                                    
                                 </div>
                         </div>
                     </div>

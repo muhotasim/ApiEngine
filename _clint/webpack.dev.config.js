@@ -5,8 +5,8 @@ var fs = require('fs');
 
 module.exports = {
     mode: 'development',
-    // devtool: 'inline-source-map',
-    devtool: 'eval' ,
+    devtool: 'inline-source-map',
+    // devtool: 'eval' ,
     entry: [
         'webpack-hot-middleware/client',
         'webpack/hot/only-dev-server',

@@ -20,6 +20,12 @@ var queryHolder = require("./databaseSDK");
 */
 module.exports = (app)=>{
 
+    app.get("/test",async (req,res)=>{
+     var d =await queryHolder.insert("system_module_infromation",{tableName:"system_module_infromation",displayName:"test"});
+      
+      res.send(d);
+    })
+
     app.post("/create-table",async (req,res)=>{
        const {tableName, displayName, query} = req.body;
        const d= await queryHolder.createTable(tableName, displayName, JSON.parse(query));

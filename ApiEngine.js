@@ -76,6 +76,16 @@ module.exports = (app)=>{
 
     app.post("/add-column",async (req, res)=>{
       const { tableName ,info} = req.body;
+      var rawData= await queryHolder.find({from:"system_module_infromation",where:" WHERE tableName='"+tableName+"'"});    
+      let fields = [];
+      JSON.parse(rawData[0].fields).forEach(item => {
+            fields.push(item);
+      });
+      fields.push(JSON.parse(info));
+      await queryHolder.findAndUpdateById(rawData[0].id,"system_module_infromation",{
+        fields:JSON.stringify(fields)
+      });
+      
       const d= await queryHolder.addColumnToTable(tableName, JSON.parse(info));
       if(d){
        res.send({ status: "success", data:[], error:"" });

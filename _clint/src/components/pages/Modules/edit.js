@@ -69,6 +69,26 @@ class Edit extends React.Component {
     }
     _addField(){
         const  {editData,moduleName,tableName}= this.state;
+        var _this = this;
+        $.ajax({
+            type:"POST",
+            url:"http://localhost:9080/add-column",
+            data:{
+                tableName:moduleName,
+                info:JSON.stringify({
+                        name:editData.name,
+                        type:editData.type.value,
+                        length:editData.length})
+            },
+            success:(returnData)=>{
+                if(returnData.status=="success"){
+                    _this._getData(_this.state.id);
+                }else{
+                    
+                }
+            }
+        });
+
     }
     _onChange(e, k){
         this.setState({[k]:e.target.value});
@@ -124,7 +144,7 @@ class Edit extends React.Component {
         if(k=="type"){
         editData[k]=e;
         }else{
-            editData[k]=e.target.value;
+            editData[k]=e;
         }
         this.setState({editData:editData});
     }

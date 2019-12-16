@@ -156,7 +156,8 @@ async function deleteTable(tableName){
 async function addColumnToTable(tableName,info){
    const columnInfo = info; 
    let type =(columnInfo.type=="FILE")?"VARCHAR":columnInfo.type;
-   const query = "ALTER TABLE "+tableName+" ADD "+columnInfo.name+" "+type+"("+columnInfo.length+")";
+   const query = "ALTER TABLE "+tableName+" ADD "+columnInfo.name+" "+columnInfo.type+"("+columnInfo.length+")";
+   console.log(query);
    return new Promise((resolve, reject)=>{
         connection.query(query,(err,result)=>{
             if(err){return resolve(false);}

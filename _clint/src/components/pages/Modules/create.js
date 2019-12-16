@@ -1,6 +1,7 @@
 import React from 'react';
 import {Header,Input,Button,Loader} from '../../../general/General';
 import Select from "react-select";
+import config from "../../../constents/settings";
 const dataTypes = [
     {value:"VARCHAR",label:"string"},
     {value:"INT",label:"integer"},
@@ -60,7 +61,7 @@ class Create extends React.Component {
 
         $.ajax({
             type:"POST",
-            url:"http://localhost:9080/create-table",
+            url:config.origin+"system/create-table",
             data:{
                 tableName:moduleName,
                 displayName:displayName,

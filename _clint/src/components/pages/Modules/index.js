@@ -53,7 +53,7 @@ class Modules extends React.Component {
         var _this=this;
         $.ajax({
           type:"POST",
-          url:config.origin+"api-engine/delete",
+          url:config.origin+"system/api-engine/delete",
           data:{
             id:id,
           },
@@ -68,7 +68,7 @@ class Modules extends React.Component {
         var _this=this;
         $.ajax({
           type:"POST",
-          url:config.origin+"api-engine/index",
+          url:config.origin+"system/api-engine/index",
           data:{
             query:_this._tableQuery(0,true),
           },
@@ -87,7 +87,7 @@ class Modules extends React.Component {
         var _this=this;
         $.ajax({
           type:"POST",
-          url:config.origin+"api-engine/index",
+          url:config.origin+"system/api-engine/index",
           data:{
             query:_this._tableQuery(_this.state.skip),
           },

@@ -37,7 +37,7 @@ class Show extends React.Component {
         var _this=this;
         $.ajax({
           type:"POST",
-          url:config.origin+"api-engine/index",
+          url:config.origin+"system/api-engine/index",
           data:{
             query:_this._tableQuery(0,true),
           },
@@ -55,7 +55,7 @@ class Show extends React.Component {
         var _this=this;
         $.ajax({
           type:"POST",
-          url:config.origin+"api-engine/index",
+          url:config.origin+"system/api-engine/index",
           data:{
             query:_this._tableQuery(_this.state.skip),
           },
@@ -78,7 +78,7 @@ class Show extends React.Component {
         const _this = this;
         $.ajax({
             type:"GET",
-            url:"http://localhost:9080/edit-table/"+id,
+            url:config.origin+"system/edit-table/"+id,
             data:{},
             success:(returnData)=>{
                 if(returnData.status=="success"){

@@ -1,6 +1,7 @@
 import React from 'react';
 import {Header,Input,Button,Loader} from '../../../general/General';
 import Select from "react-select";
+import config from "../../../constents/settings";
 const dataTypes = [
     {value:"VARCHAR",label:"string"},
     {value:"INT",label:"integer"},
@@ -40,7 +41,7 @@ class Edit extends React.Component {
         const _this = this;
         $.ajax({
             type:"GET",
-            url:"http://localhost:9080/edit-table/"+id,
+            url:config.origin+"system/edit-table/"+id,
             data:{},
             success:(returnData)=>{
                 if(returnData.status=="success"){
@@ -72,7 +73,7 @@ class Edit extends React.Component {
         var _this = this;
         $.ajax({
             type:"POST",
-            url:"http://localhost:9080/add-column",
+            url:config.origin+"system/add-column",
             data:{
                 tableName:moduleName,
                 info:JSON.stringify({
@@ -121,7 +122,7 @@ class Edit extends React.Component {
 
         $.ajax({
             type:"POST",
-            url:"http://localhost:9080/update-table",
+            url:config.origin+"system/update-table",
             data:{
                 tableName:moduleName,
                 displayName:displayName,
@@ -150,13 +151,10 @@ class Edit extends React.Component {
     }
     _removeField(fieldName,index){
         const {moduleName} =this.state;
-        // let tempFields = fields;
-        // tempFields.splice(index,1);
-        // this.setState({fields:tempFields});
         var _this =this;
         $.ajax({
             type:"POST",
-            url:"http://localhost:9080/remove-column",
+            url:config.origin+"system/remove-column",
             data:{
                 tableName:moduleName, columnName:fieldName
             },

@@ -16,7 +16,7 @@ class Show extends React.Component {
             columns:[],
             TotalPage:1
         };
-        ["_onParamsChange", "_getData","_tableQuery", "_getTableData"].forEach(fn=>{this[fn]=this[fn].bind(this);});
+        ["_onParamsChange", "_getData","_tableQuery", "_getTableData", "onDelete"].forEach(fn=>{this[fn]=this[fn].bind(this);});
   
       }
       _tableQuery(skip,count){
@@ -87,6 +87,8 @@ class Show extends React.Component {
                     fields.forEach(field=>{
                         columns.push({ label: field.name, column: field.name, type: "data" })
                     });
+                    
+                    columns.push({ label: "Action", column: "action", type: "node" })
                     _this.setState({tableName:returnData.data.tableName,columns:columns},()=>{
                         _this._getCount();
                     })
@@ -97,6 +99,23 @@ class Show extends React.Component {
             }
         });
     }
+    onDelete(id){
+      var _this=this;
+      const tableId = this.props.match.params.id;
+      $.ajax({
+        type:"POST",
+        url:config.origin+"apis/test/deleteById",
+        data:{
+          id:id,
+          tableName:_this.state.tableName
+        },
+        success:(returnData)=>{
+          if(returnData.status=="success"){
+            _this._getData(tableId);
+          }
+        }
+      })
+    }
       componentDidMount(){
           const id = this.props.match.params.id;
           this._getData(id);
@@ -106,10 +125,10 @@ class Show extends React.Component {
       _onParamsChange(value, type){
         switch(value){
           case "_delete":
-            this._deleteModule(type.id);
+            this.onDelete(type.id);
           break;
-            case "_edit":
-            this.setState({redirect:true, redirectId:type.id});
+          case "_edit":
+            // this.setState({redirect:true, redirectId:type.id});
           break;
         }
       }

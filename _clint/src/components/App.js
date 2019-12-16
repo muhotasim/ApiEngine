@@ -14,6 +14,7 @@ import Dashboard from './pages/Dashboard';
 import Modules from "./pages/Modules";
 import ModuleCreate from "./pages/Modules/create";
 import ModuleEdit from "./pages/Modules/edit";
+import ModuleShow from "./pages/Modules/show";
 
 import { hot } from 'react-hot-loader';
 
@@ -66,7 +67,7 @@ class App extends React.Component {
                                     <Route exact path="/Modules" component={Modules}/>
                                     <Route exact path="/Module/Create" component={ModuleCreate}/>
                                     <Route exact path="/Module/Edit/:id" component={ModuleEdit}/>
-                                    
+                                    <Route exact path="/Module/Show/:id" component={ModuleShow}/>
                                     
                                 </div>
                         </div>

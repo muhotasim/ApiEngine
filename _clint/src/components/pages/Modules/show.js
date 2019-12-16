@@ -7,39 +7,23 @@ import config from "../../../constents/settings";
 import {Redirect} from "react-router-dom";
 
 const limit =10;
-const  columns= [
-    { label: "Display Name", column: "displayName", type: "data" },
-    
-    { label: "Actions", column: "action", type: "node" },
-]
-class Modules extends React.Component {
+
+class Show extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            TotalPage:1,
-            skip:0,
-            redirect:false,
-            redirectId:null,
             tableName:"",
-            redirectToShow:false
+            columns:[],
+            TotalPage:1
         };
-        ["_onParamsChange", "_tableQuery", "_dataCount" ,"_getData", "_deleteModule", "_loadTableData"].forEach(fn=>{this[fn]=this[fn].bind(this);});
+        ["_onParamsChange", "_getData","_tableQuery", "_getTableData"].forEach(fn=>{this[fn]=this[fn].bind(this);});
   
       }
-
-      componentDidMount(){
-        this._loadTableData();
-      }
-
-      _loadTableData(){
-        this._dataCount();
-      }
-
       _tableQuery(skip,count){
         let query = {};
         query.count=count;
-        query.from="system_module_infromation";
-        query.fields =["displayName", "tableName", "id"]
+        query.from=this.state.tableName;
+        // query.fields =["displayName", "tableName", "id"]
         if(skip){
           query.skip=skip;
         }
@@ -49,22 +33,7 @@ class Modules extends React.Component {
 
         return JSON.stringify(query);
       }
-      _deleteModule(id){
-        var _this=this;
-        $.ajax({
-          type:"POST",
-          url:config.origin+"api-engine/delete",
-          data:{
-            id:id,
-          },
-          success:(returnData)=>{
-            _this._loadTableData();
-        
-          }
-        });
-      }
-
-      _dataCount(){
+      _getCount(){
         var _this=this;
         $.ajax({
           type:"POST",
@@ -76,14 +45,13 @@ class Modules extends React.Component {
             const totalData = returnData.data.count;
             let totalPage = parseInt(totalData/limit)+1;
             _this.setState({TotalPage:totalPage},()=>{
-              _this._getData();
+              _this._getTableData();
             });
         
           }
         });
       }
-
-      _getData(){
+      _getTableData(){
         var _this=this;
         $.ajax({
           type:"POST",
@@ -96,7 +64,6 @@ class Modules extends React.Component {
             returnData.data.forEach(d=>{
               datas.push(Object.assign({},d,{
                 action:[
-                  {className:"btn btn-sm btn-primary",id:"_show",label:"<i class='fa fa-eye'></i>",data:{id:d.id}},
                   {className:"btn btn-sm btn-primary",id:"_edit",label:"<i class='fa fa-edit'></i>",data:{id:d.id}},
                   {className:"btn btn-sm btn-primary",id:"_delete",label:"<i class='fa fa-trash'></i>",data:{id:d.id}}
                 ]
@@ -107,6 +74,34 @@ class Modules extends React.Component {
           }
         });
       }
+      _getData(id){
+        const _this = this;
+        $.ajax({
+            type:"GET",
+            url:"http://localhost:9080/edit-table/"+id,
+            data:{},
+            success:(returnData)=>{
+                if(returnData.status=="success"){
+                    const fields =JSON.parse(returnData.data.fields);
+                    let columns=[];
+                    fields.forEach(field=>{
+                        columns.push({ label: field.name, column: field.name, type: "data" })
+                    });
+                    _this.setState({tableName:returnData.data.tableName,columns:columns},()=>{
+                        _this._getCount();
+                    })
+                 
+                }else{
+                    
+                }
+            }
+        });
+    }
+      componentDidMount(){
+          const id = this.props.match.params.id;
+          this._getData(id);
+          
+      }
 
       _onParamsChange(value, type){
         switch(value){
@@ -116,29 +111,16 @@ class Modules extends React.Component {
             case "_edit":
             this.setState({redirect:true, redirectId:type.id});
           break;
-          case "_show":
-            console.log(type)
-            this.setState({redirectToShow:true, redirectId:type.id});
-          break;
         }
       }
 
     render() {
 
-      if(this.state.redirect){
-        return <Redirect to={"/Module/Edit/"+this.state.redirectId}/>
-      }
-      if(this.state.redirectToShow){
-        return <Redirect to={"/Module/Show/"+this.state.redirectId}/>
-      }
+   
         return (<div>
-            <Header HeaderTitle={"Modules"}/>
-            <div>
-                <Link className="btn btn-md btn-primary float-right" to="/Module/Create">Create</Link>
-                <p className="clearfix"></p>
-            </div>
+            <Header HeaderTitle={"View Datatable"}/>
           <div>
-            <Datatable columns={columns} ref={el=>{this.Datatable =el;}} onParamsChange={this._onParamsChange}
+            <Datatable columns={this.state.columns} ref={el=>{this.Datatable =el;}} onParamsChange={this._onParamsChange}
                        TotalPage={this.state.TotalPage}/>
           </div>
         </div>);
@@ -146,4 +128,4 @@ class Modules extends React.Component {
 
 }
 
-export default Modules;
+export default Show;

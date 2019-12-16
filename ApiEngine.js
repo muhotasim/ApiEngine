@@ -22,7 +22,6 @@ module.exports = (app)=>{
 
   
   app.post("/api-engine/index", async (req,res)=>{
-    console.log(JSON.parse(req.body.query))
     const d= await queryHolder.find(JSON.parse(req.body.query));
     if(d){
       res.send({ status: "success", data:d, error:"" });
@@ -117,6 +116,10 @@ module.exports = (app)=>{
        res.send({ status: "failed",data:[],error:"error" });
      }
     });
+
+
+    // get module data
+
 
 
 }

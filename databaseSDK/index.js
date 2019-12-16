@@ -10,8 +10,8 @@ const connection = mysql.createConnection({
 const prefix = "";
 async function find(query){
     let q ="SELECT ";
-    if(query.count){ q+="COUNT(" }
-    if(query.fields){ q+=query.fields.join(","); }else{ q+="*"; }
+    if(query.count){ q+="COUNT("; }
+    if(query.fields && !query.count){ q+=""+query.fields.join(",")+""; }else{ q+="*"; }
     if(query.count){ q+=") "}
     q+=" FROM "+query.from+" ";
     if(query.where){ q+=query.where; }
@@ -19,12 +19,27 @@ async function find(query){
     let limit = query.limit;
     if(limit){ q+=" LIMIT "+limit; }
     if(skip){ q+=" OFFSET "+skip; }
-    q+=";"
-
+    q+=";";
     return new Promise((resolve, reject)=>{
         connection.query(q,(err,result)=>{
             if(err){return resolve(false);}
-            return resolve(result);
+            let res =result;
+           
+            if(query.count){  
+                return resolve({count:Object.values(res[0])[0]});
+            }
+
+            return resolve(res);
+        });
+    });
+}
+async function findById(tableName,id){
+    let q ="SELECT * FROM "+tableName+" WHERE id="+id;
+    return new Promise((resolve, reject)=>{
+        connection.query(q,(err,result)=>{
+            if(err){return resolve(false);}
+            let res =(result.length)?result[0]:result;
+            return resolve(res);
         });
     });
 }
@@ -62,7 +77,7 @@ async function findAndUpdateById(id, tableName, data){
     let query ="UPDATE "+tableName+" SET ";
     const keys =Object.keys(data);
     keys.forEach((d, i)=>{
-        query+= " "+ d+"="+data[d];
+        query+= " "+ d+"='"+data[d]+"'";
         if(keys.length!=i+1){
             query+=" , ";
         }
@@ -71,6 +86,7 @@ async function findAndUpdateById(id, tableName, data){
     query+=" WHERE id= "+id;
     return new Promise((resolve, reject)=>{
         connection.query(query,(err,result)=>{
+            
             if(err){return resolve(false);}
             return resolve(result);
         });
@@ -97,8 +113,8 @@ async function createTable(tableName, displayName, tabeInformation=[]){
  
     var tbInfo = tabeInformation;
     var tb = "id int NOT NULL AUTO_INCREMENT,"+
-    "Created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,"+
-    "Updated_at  DATETIME NOT NULL ON UPDATE CURRENT_TIMESTAMP,";
+    "Created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,";
+    "Updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,";
 
     tbInfo.forEach((d,i)=>{
         let type =(d.type=="FILE")?"VARCHAR":d.type;
@@ -149,7 +165,8 @@ async function addColumnToTable(tableName,info){
     });
 }
 async function deleteColumnToTable(tableName,columnName){
-    const query = "ALTER TABLE "+tableName+" DROP COLUMN "+columnName;
+    const query = "ALTER TABLE "+tableName+" DROP COLUMN "+columnName+"";
+    console.log(query);
     return new Promise((resolve, reject)=>{
         connection.query(query,(err,result)=>{
             if(err){return resolve(false);}
@@ -160,5 +177,5 @@ async function deleteColumnToTable(tableName,columnName){
 
 
 module.exports = {
-    insert,createTable,deleteTable,addColumnToTable,deleteColumnToTable,find,deleteById,deleteAll,findAndUpdateById,findAndUpdate
+    findById, insert,createTable,deleteTable,addColumnToTable,deleteColumnToTable,find,deleteById,deleteAll,findAndUpdateById,findAndUpdate
 };

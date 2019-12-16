@@ -13,6 +13,7 @@ import Topmenu from '../general/Topmenu';
 import Dashboard from './pages/Dashboard';
 import Modules from "./pages/Modules";
 import ModuleCreate from "./pages/Modules/create";
+import ModuleEdit from "./pages/Modules/edit";
 
 import { hot } from 'react-hot-loader';
 
@@ -64,6 +65,8 @@ class App extends React.Component {
                                     <Route exact path="/" component={Dashboard}/>
                                     <Route exact path="/Modules" component={Modules}/>
                                     <Route exact path="/Module/Create" component={ModuleCreate}/>
+                                    <Route exact path="/Module/Edit/:id" component={ModuleEdit}/>
+                                    
                                     
                                 </div>
                         </div>

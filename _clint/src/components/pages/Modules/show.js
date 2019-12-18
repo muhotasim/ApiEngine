@@ -1,5 +1,5 @@
 import React from 'react';
-import {Header,Input,Button} from '../../../general/General';
+import {Header,Input,Button,Model} from '../../../general/General';
 import Select from "react-select";
 import {Link} from "react-router-dom";
 import Datatable from "../../../general/Datatable";
@@ -170,6 +170,9 @@ class Show extends React.Component {
             <div>
               <button className="btn btn-md btn-default" onClick={this._openCreateDataModel}>Create Data</button>
             </div>
+            <div className="pull-right">
+              <span><i className="fa fa-puzzle-piece" style={{color: "coral",fontSize: "22px",textShadow: "1px 1px 1px black"}}></i></span>
+            </div>
 
             {this.state.openCreateModel&&(
               <CreateData fields={this.state.fields} tableName={this.state.tableName} edit={this.state.edit} editId={this.state.editId}  afterSubmit={()=>{
@@ -293,7 +296,7 @@ class CreateData extends React.Component{
         <div>
           {!this.props.edit?<Button className="btn btn-md btn-primary" onClick={this.onCreate}>Create data</Button>:
           <Button className="btn btn-md btn-primary" onClick={this.onUpdate}>Update data</Button>}
-          
+          <Model/>
           {this.props.edit&&(<Button className="btn btn-md btn-primary" onClick={()=>{
               this.props.onCancelEdit();
           }}>Cancel</Button>)}

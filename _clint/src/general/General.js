@@ -34,3 +34,23 @@ export const uuid = (i = 0) => {
 const rendomString = () => {
     return Math.random().toString(36).substring(7);
 };
+export const Model = (props)=>(<div>
+    <button type="button" className="btn btn-info btn-lg" >Open Modal</button>
+<div id="myModal" className="modal fade">
+  <div className="modal-dialog">
+    <div className="modal-content">
+      <div className="modal-header">
+        <button type="button" className="close">&times;</button>
+        <h4 className="modal-title">Modal Header</h4>
+      </div>
+      <div class="modal-body">
+        
+      </div>
+      <div className="modal-footer">
+       
+      </div>
+    </div>
+
+  </div>
+</div>
+</div>)

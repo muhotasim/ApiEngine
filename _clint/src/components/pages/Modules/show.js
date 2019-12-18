@@ -17,9 +17,11 @@ class Show extends React.Component {
             TotalPage:1,
             openCreateModel:false,
             fields:[],
-            skip:0
+            skip:0,
+            edit:false,
+            editId:null
         };
-        ["_onParamsChange", "_getData","_tableQuery", "_getTableData", "onDelete", "_openCreateDataModel"].forEach(fn=>{this[fn]=this[fn].bind(this);});
+        ["_onParamsChange", "_getData","_tableQuery", "_getTableData", "onDelete", "_openCreateDataModel", "onCancelEdit"].forEach(fn=>{this[fn]=this[fn].bind(this);});
   
       }
       _tableQuery(skip,count){
@@ -132,24 +134,33 @@ class Show extends React.Component {
             this.onDelete(type.id);
           break;
           case "_edit":
-            // this.setState({redirect:true, redirectId:type.id});
+            _this._onEdit(type.id);
           break;
           case "page":
             let skip = type*limit;
             this.setState({skip:skip},()=>{
               _this._getTableData();
-            })
-            // this.setState({redirect:true, redirectId:type.id});
-          break;
-          
+            });
+          break; 
         }
-        console.log(value,type)
       }
 
+      _onEdit(id){
+        const _this = this;
+        this.setState({openCreateModel:false},()=>{
+          _this.setState({edit:true,editId:id,openCreateModel:true});
+        });
+      }
       _openCreateDataModel(){
         this.setState({openCreateModel:!this.state.openCreateModel});
       }
 
+      onCancelEdit(){
+        const _this = this;
+        this.setState({openCreateModel:false},()=>{
+          _this.setState({edit:false,editId:null,openCreateModel:true});
+        });
+      }
     render() {
 
    
@@ -161,9 +172,9 @@ class Show extends React.Component {
             </div>
 
             {this.state.openCreateModel&&(
-              <CreateData fields={this.state.fields} tableName={this.state.tableName} data={this.state.data} afterSubmit={()=>{
+              <CreateData fields={this.state.fields} tableName={this.state.tableName} edit={this.state.edit} editId={this.state.editId}  afterSubmit={()=>{
                 this._getData(this.props.match.params.id);
-              }}/>
+              }} onCancelEdit={this.onCancelEdit}/>
             )}
             <Datatable columns={this.state.columns} ref={el=>{this.Datatable =el;}} onParamsChange={this._onParamsChange}
                        TotalPage={this.state.TotalPage}/>
@@ -180,16 +191,49 @@ class CreateData extends React.Component{
     this.state={
       fields: [],
       tableName: "",
-      data:{}
-    }
+      data:{},
+      edit:false||this.props.edit,
+      id:null||this.props.editId,
+    };
     this.onCreate = this.onCreate.bind(this);
+    this.retInputs = this.retInputs.bind(this);
+    this.onUpdate = this.onUpdate.bind(this);
   }
 
   componentDidMount(){
+    const id =this.props.editId;
+    const isEdit =this.props.edit;
+    const fields=this.props.fields;
+    const tableName = this.props.tableName;
+    const _this = this;
     
-    this.setState({fields:this.props.fields,tableName:this.props.tableName});
+    this.setState({fields:fields,tableName:tableName},()=>{
+      if(id!=null && isEdit ){
+        $.ajax({
+          type:"POST",
+          url:config.origin+"apis/"+tableName+"/findById/"+id,
+          data:{},
+          success:(returnData)=>{
+            if(returnData.status=="success"){
+              let newData ={};
+              const data = returnData.data[0];
+              fields.forEach(d=>{ newData[d.name]=data[d.name]; });
+              _this.setState({data:newData,id:data.id});
+            }
+          }
+        })
+      }
+    });
   }
 
+  retInputs(){
+    var tempData = this.state.data;
+    var newData = {};
+    Object.keys(tempData).forEach(d=>{
+      newData[d]="";
+    });
+    this.setState({data:newData})
+  }
   onCreate(){
     // $.ajax({
     //   type:"POST",
@@ -204,7 +248,30 @@ class CreateData extends React.Component{
       },
       success:(returnData)=>{
         if(returnData.status=="success"){
+         _this.retInputs();
           _this.props.afterSubmit()
+        }
+      }
+    });
+  }
+
+  onUpdate(){
+    var _this = this;
+    //apis/:module/update/:id
+    $.ajax({
+      type:"POST",
+      url:config.origin+"apis/"+_this.state.tableName+"/update/"+_this.state.id,
+      data:{
+        data:JSON.stringify(_this.state.data)
+      },
+      success:(returnData)=>{
+        if(returnData.status=="success"){  
+        
+        _this.setState({ edit:false, id:null},()=>{
+          _this.retInputs();
+          _this.props.afterSubmit();
+          _this.props.onCancelEdit();
+        });
         }
       }
     });
@@ -218,11 +285,18 @@ class CreateData extends React.Component{
                 var tempData = this.state.data;
                 tempData[key]=val;
                 this.setState({tempData});
-              }}/>
+              }}
+              
+              />
           </div>)
         })}
         <div>
-          <Button className="btn btn-md btn-primary" onClick={this.onCreate}>Create data</Button>
+          {!this.props.edit?<Button className="btn btn-md btn-primary" onClick={this.onCreate}>Create data</Button>:
+          <Button className="btn btn-md btn-primary" onClick={this.onUpdate}>Update data</Button>}
+          
+          {this.props.edit&&(<Button className="btn btn-md btn-primary" onClick={()=>{
+              this.props.onCancelEdit();
+          }}>Cancel</Button>)}
         </div>
     </div>)
   }

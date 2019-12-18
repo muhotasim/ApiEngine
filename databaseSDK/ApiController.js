@@ -18,6 +18,18 @@ module.exports = (app)=>{
           res.send({ status: "failed",data:[],error:"error" });
         }
       });
+
+      app.post("/apis/:module/findById/:id", async (req,res)=>{
+        const query ={};
+        query.from=req.moduleName;
+        query.where = " WHERE id="+req.params.id;
+        const d= await queryHolder.find(query);
+        if(d){
+          res.send({ status: "success", data:d, error:"" });
+        }else{
+          res.send({ status: "failed",data:[],error:"error" });
+        }
+      });
       app.post("/apis/:module/insert", async (req,res)=>{
         const d= await queryHolder.insert(req.moduleName,JSON.parse(req.body.data));
         if(d){

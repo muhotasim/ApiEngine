@@ -9,7 +9,13 @@ import DatePicker  from "react-datepicker";
 const limit =10;
 
 const apiList = [
-  {title:"Delete by Id",apiUrl:"/apis/"+"${module}"+"/delete/"+"${id}",details:"method type is post "}
+  {title:"Get data by query",apiUrl:"/apis/${module}/index",details:"method type is post ",example:""},
+  {title:"Get data by Id",apiUrl:"/apis/${module}/findById/${id}",details:"method type is post ",example:""},
+  {title:"Insert data",apiUrl:"/apis/${module}/insert",details:"method type is post ",example:""},
+  {title:"Delete by Id",apiUrl:"/apis/"+"${module}"+"/delete/"+"${id}",details:"method type is post ",example:""},
+  {title:"Delete by Condition",apiUrl:"/apis/${module}/delete",details:"method type is post ",example:""},
+  {title:"Update data with Condition",apiUrl:"/apis/${module}/update",details:"method type is post ",example:""},
+  {title:"Update by id",apiUrl:"/apis/${module}/update/${id}",details:"method type is post ",example:""}
 ];
 
 class Show extends React.Component {
@@ -47,7 +53,7 @@ class Show extends React.Component {
         var _this=this;
         $.ajax({
           type:"POST",
-          url:config.origin+"system/api-engine/index",
+          url:config.origin+"apis/"+_this.state.tableName+"/index",
           data:{
             query:_this._tableQuery(0,true),
           },
@@ -63,9 +69,10 @@ class Show extends React.Component {
       }
       _getTableData(){
         var _this=this;
+        ///apis/:module/index
         $.ajax({
           type:"POST",
-          url:config.origin+"system/api-engine/index",
+          url:config.origin+"apis/"+_this.state.tableName+"/index",
           data:{
             query:_this._tableQuery(_this.state.skip),
           },

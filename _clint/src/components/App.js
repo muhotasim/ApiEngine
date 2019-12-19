@@ -16,6 +16,9 @@ import ModuleCreate from "./pages/Modules/create";
 import ModuleEdit from "./pages/Modules/edit";
 import ModuleShow from "./pages/Modules/show";
 
+import User from "./pages/User";
+import UserCreate from "./pages/User/create";
+
 import { hot } from 'react-hot-loader';
 
 //------------- end import pages ---------------
@@ -68,6 +71,9 @@ class App extends React.Component {
                                     <Route exact path="/Module/Create" component={ModuleCreate}/>
                                     <Route exact path="/Module/Edit/:id" component={ModuleEdit}/>
                                     <Route exact path="/Module/Show/:id" component={ModuleShow}/>
+
+                                    <Route exact path="/Users" component={User}/>
+                                    <Route exact path="/Users/Create" component={UserCreate}/>
                                     
                                 </div>
                         </div>

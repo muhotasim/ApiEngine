@@ -8,6 +8,11 @@ const menu = [
         link: "/Modules",
         label: "Modules",
         menus: []
+    },
+    {
+        link: "/Users",
+        label: "Users",
+        menus: []
     }
 ];
 export default menu;

@@ -29,7 +29,6 @@ module.exports = (app)=>{
       }else{
         res.send({ status: "failed",data:[],error:"error" });
       }
-
     });
 
     app.post("/apis/:module/index", async (req,res)=>{

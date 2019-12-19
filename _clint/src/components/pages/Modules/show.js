@@ -8,6 +8,10 @@ import {Redirect} from "react-router-dom";
 import DatePicker  from "react-datepicker";
 const limit =10;
 
+const apiList = [
+  {title:"Delete by Id",apiUrl:"/apis/"+"${module}"+"/delete/"+"${id}",details:"method type is post "}
+];
+
 class Show extends React.Component {
     constructor(props) {
         super(props);
@@ -19,9 +23,10 @@ class Show extends React.Component {
             fields:[],
             skip:0,
             edit:false,
-            editId:null
+            editId:null,
+            apiListOpen:false
         };
-        ["_onParamsChange", "_getData","_tableQuery", "_getTableData", "onDelete", "_openCreateDataModel", "onCancelEdit"].forEach(fn=>{this[fn]=this[fn].bind(this);});
+        ["_onParamsChange", "_getData","_tableQuery", "_getTableData", "onDelete", "showApiList", "_openCreateDataModel", "onCancelEdit"].forEach(fn=>{this[fn]=this[fn].bind(this);});
   
       }
       _tableQuery(skip,count){
@@ -104,23 +109,23 @@ class Show extends React.Component {
             }
         });
     }
-    onDelete(id){
-      var _this=this;
-      const tableId = this.props.match.params.id;
-      $.ajax({
-        type:"POST",
-        url:config.origin+"apis/"+_this.state.tableName+"/delete/"+id,
-        data:{
-          id:id,
-          tableName:_this.state.tableName
-        },
-        success:(returnData)=>{
-          if(returnData.status=="success"){
-            _this._getData(tableId);
+      onDelete(id){
+        var _this=this;
+        const tableId = this.props.match.params.id;
+        $.ajax({
+          type:"POST",
+          url:config.origin+"apis/"+_this.state.tableName+"/delete/"+id,
+          data:{
+            id:id,
+            tableName:_this.state.tableName
+          },
+          success:(returnData)=>{
+            if(returnData.status=="success"){
+              _this._getData(tableId);
+            }
           }
-        }
-      })
-    }
+        })
+      }
       componentDidMount(){
           const id = this.props.match.params.id;
           this._getData(id);
@@ -161,6 +166,10 @@ class Show extends React.Component {
           _this.setState({edit:false,editId:null,openCreateModel:true});
         });
       }
+      showApiList(){
+        this.setState({apiListOpen:true});
+        console.log("show api list")
+      }
     render() {
 
    
@@ -170,15 +179,29 @@ class Show extends React.Component {
             <div>
               <button className="btn btn-md btn-default" onClick={this._openCreateDataModel}>Create Data</button>
             </div>
-            <div className="pull-right">
-              <span><i className="fa fa-puzzle-piece" style={{color: "coral",fontSize: "22px",textShadow: "1px 1px 1px black"}}></i></span>
-            </div>
-
+            {this.state.apiListOpen?
+            <Model title={"Api list"} onCloseModel={()=>{this.setState({apiListOpen:false})}}>
+              <div>
+                {apiList.map(d=>{
+                  return (<div>
+                    <h4>{d.title}</h4>
+                    {<p>{d.details}</p>}
+                    <textarea className="form-control" disabled>{d.apiUrl}</textarea>
+                  </div>);
+                })}
+              </div>
+            </Model>:null}
             {this.state.openCreateModel&&(
               <CreateData fields={this.state.fields} tableName={this.state.tableName} edit={this.state.edit} editId={this.state.editId}  afterSubmit={()=>{
                 this._getData(this.props.match.params.id);
               }} onCancelEdit={this.onCancelEdit}/>
             )}
+
+            
+            <div className="pull-right">
+              <span label="show apis" onClick={this.showApiList}><i className="fa fa-puzzle-piece" style={{color: "coral",fontSize: "22px",textShadow: "1px 1px 1px black"}}></i></span>
+            </div>
+            <p className="clearfix"></p>
             <Datatable columns={this.state.columns} ref={el=>{this.Datatable =el;}} onParamsChange={this._onParamsChange}
                        TotalPage={this.state.TotalPage}/>
           </div>
@@ -296,7 +319,7 @@ class CreateData extends React.Component{
         <div>
           {!this.props.edit?<Button className="btn btn-md btn-primary" onClick={this.onCreate}>Create data</Button>:
           <Button className="btn btn-md btn-primary" onClick={this.onUpdate}>Update data</Button>}
-          <Model/>
+         
           {this.props.edit&&(<Button className="btn btn-md btn-primary" onClick={()=>{
               this.props.onCancelEdit();
           }}>Cancel</Button>)}

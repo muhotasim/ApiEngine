@@ -34,23 +34,41 @@ export const uuid = (i = 0) => {
 const rendomString = () => {
     return Math.random().toString(36).substring(7);
 };
-export const Model = (props)=>(<div>
-    <button type="button" className="btn btn-info btn-lg" >Open Modal</button>
-<div id="myModal" className="modal fade">
-  <div className="modal-dialog">
-    <div className="modal-content">
-      <div className="modal-header">
-        <button type="button" className="close">&times;</button>
-        <h4 className="modal-title">Modal Header</h4>
-      </div>
-      <div class="modal-body">
-        
-      </div>
-      <div className="modal-footer">
-       
-      </div>
-    </div>
+export class  Model extends React.Component{
+    constructor(props){
+        super(props);
+        this.refModel = uuid();
+    }
+    componentDidMount(){
+        $("#"+this.refModel).modal("show")
+    }
 
-  </div>
-</div>
-</div>)
+    componentWillUnmount(){
+        $("#"+this.refModel).modal("hide")
+    }
+
+    
+
+    render(){
+        return (<div>
+            <div id={this.refModel} className="modal fade">
+              <div className="modal-dialog" style={{marginTop:"80px"}}>
+                <div className="modal-content">
+                  <div className="modal-header">
+                  <h4 className="modal-title">{this.props.title}</h4>
+                    <button type="button" className="close" onClick={this.props.onCloseModel}>&times;</button>
+                    
+                  </div>
+                  <div class="modal-body">
+                    {this.props.children}
+                  </div>
+                  <div className="modal-footer">
+                   
+                  </div>
+                </div>
+            
+              </div>
+            </div>
+            </div>)
+    }
+}

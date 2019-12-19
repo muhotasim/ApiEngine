@@ -281,4 +281,8 @@ a{
     color: #333333;
     cursor: unset;
 }
+.login-panel {
+    padding: 20px;
+    box-shadow: 1px 1px 1px lightgrey;
+}
 /*end react dropzone*/

@@ -85,7 +85,7 @@ const mapStateToProps = (state) => {
 };
 const mapDispatchToProps = (dispatch) => {
     return {
-        _login: (u, p) => dispatch(setLoginData(u, p)),
+        _login: (d) => dispatch(setLoginData(d)),
         _setSetting: (d) => dispatch(setSettings(d)),
         _logout: () => dispatch(logout())
     }

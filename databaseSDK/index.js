@@ -20,6 +20,7 @@ async function find(query){
     if(limit){ q+=" LIMIT "+limit; }
     if(skip){ q+=" OFFSET "+skip; }
     q+=";";
+    console.log(q);
     return new Promise((resolve, reject)=>{
         connection.query(q,(err,result)=>{
             if(err){return resolve(false);}

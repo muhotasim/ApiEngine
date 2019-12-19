@@ -1,8 +1,8 @@
 import constents from '../constents/action.type';
 
 const initialState = {
-    loginData: {username: "fuad"},
-    username: "fuad",
+    loginData: null,
+    username: null,
 };
 
 export default (state = initialState, action = {}) => {

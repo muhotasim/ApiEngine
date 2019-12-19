@@ -8,6 +8,24 @@ module.exports = (app)=>{
       // console.log(rawData);
       next();
     });
+
+    app.post("/apis/login",async (req, res)=>{
+      const query={};
+      // console.log(req.body);
+      query.from="system_module_users";
+      query.where=" WHERE email='"+req.body.email+"'";
+      const d= await queryHolder.find(query);
+      if(d.length){
+        var user = d[0];
+        delete user.id;
+        delete user.password;
+         res.send({ status: "success", data:d, error:"" });
+      }else{
+        res.send({ status: "failed",data:[],error:"error" });
+      }
+
+    });
+
     app.post("/apis/:module/index", async (req,res)=>{
         const query =JSON.parse(req.body.query);
         query.from=req.moduleName;

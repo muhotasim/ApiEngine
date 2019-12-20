@@ -1,4 +1,5 @@
 const express = require("express");
+const fileUpload = require("express-fileupload");
 const app = express();
 const PORT = 9080;
 
@@ -11,9 +12,18 @@ app.use(function(req, res, next) {
     next();
   });
 
+  app.use(fileUpload({
+    useTempFiles : true,
+    tempFileDir : '/tmp/'
+}));
+
 require("./databaseSDK/ApiEngine")(app);
 require("./databaseSDK/ApiController")(app);
 
+app.post("/test",async (req,res)=>{
+  console.log(req.files);
+  res.send("test")
+})
 
 app.get("/",(req, res)=>{
     res.send("");

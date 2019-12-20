@@ -54,6 +54,7 @@ module.exports = (app)=>{
         }
       });
       app.post("/apis/:module/insert", async (req,res)=>{
+        
         const d= await queryHolder.insert(req.moduleName,JSON.parse(req.body.data));
         if(d){
           res.send({ status: "success", data:d, error:"" });

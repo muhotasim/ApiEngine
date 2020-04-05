@@ -1,6 +1,5 @@
 const mysql = require('mysql2');
 var config = require("../config");
-
 const connection = mysql.createConnection({
     host: config.host,
     user: config.user,

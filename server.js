@@ -2,7 +2,7 @@ const express = require("express");
 const fileUpload = require("express-fileupload");
 const app = express();
 const PORT = 9080;
-
+var passwordHash = require('password-hash');
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 app.use(function(req, res, next) {
@@ -21,11 +21,12 @@ require("./databaseSDK/ApiEngine")(app);
 require("./databaseSDK/ApiController")(app);
 
 app.post("/test",async (req,res)=>{
-  console.log(req.files);
-  res.send("test")
+  console.log(await passwordHash.generate("amd123123"));
+  res.send("test");
 })
 
 app.get("/",(req, res)=>{
+  console.log( passwordHash.generate("amd123123"));
     res.send("");
 });
 app.listen(PORT);

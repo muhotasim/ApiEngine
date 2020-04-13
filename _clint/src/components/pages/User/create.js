@@ -24,7 +24,7 @@ class Create extends React.Component {
                     <Input className="form-control" inputlabel="user email" type="email" />
                     <Input className="form-control" inputlabel="user password" type="password" />
                     <Input className="form-control" inputlabel="confirm password" type="password" />
-                    <Button className="btn btn-md btn-primary">Create User</Button>
+                    <Button className="btn btn-md btn-default">Create User</Button>
                </div>
           </div>
         </div>);

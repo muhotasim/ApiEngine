@@ -1,7 +1,7 @@
 module.exports = {
-    host: 'localhost',
-    user: 'root',
-    password: '',
-    database: 'test_database',
-    secret:"secret"
+  host: 'localhost',
+  user: 'root',
+  password: '',
+  database: 'api_engine',
+  secret: 'secret',
 };

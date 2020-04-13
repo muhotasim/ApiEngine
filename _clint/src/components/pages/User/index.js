@@ -20,7 +20,7 @@ class User extends React.Component {
         return (<div>
             <Header HeaderTitle={"Users"}/>
             <div>
-                <Link className="btn btn-md btn-primary float-right" to="/Users/Create">Create</Link>
+                <Link className="btn btn-md btn-default float-right" to="/Users/Create">Create</Link>
                 <p className="clearfix"></p>
             </div>
           <div>

@@ -1,0 +1,10 @@
+ul.api-list-holder {
+  padding: 1rem;
+  border: 1px solid lightgray;
+}
+li.api-list-item {
+  list-style: none;
+  font-weight: 600;
+  border-bottom: 1px solid lightgray;
+  cursor: pointer;
+}

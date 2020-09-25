@@ -1,0 +1,24 @@
+.table th,
+.table td {
+  padding: 0.45rem;
+  vertical-align: top;
+  border-top: 1px solid #dee2e6;
+}
+
+.page-item .page-link {
+  position: relative;
+  display: block;
+  padding: 0.5rem 0.75rem;
+  margin-left: -1px;
+  line-height: 1.25;
+}
+
+.page-item.active .page-link {
+  z-index: 1;
+  color: #fff;
+  background-color: rgb(7, 71, 166);
+  border-color: rgb(4, 52, 124);
+}
+.page-item.active .page-link:hover {
+  color: white;
+}

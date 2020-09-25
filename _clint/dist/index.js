@@ -14,8 +14,6 @@
 
 [
   '/content/js/jquery-3.4.1.min.js',
-  '/content/js/d3.min.js',
-  '/content/js/d3-scale-chromatic.v1.min.js',
   '/content/js/notify.js',
   '/content/js/bootstrap.min.js',
   '/bundle.js',

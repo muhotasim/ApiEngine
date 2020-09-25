@@ -1,9 +1,10 @@
 import constents from '../constents/action.type';
 
 const initialState = {
-    // loginData: null,
-    loginData: {username:"fuad"},
-    username: null,
+    loginData: "",
+    username: "",
+    token:"",
+    useremail:"",
 };
 
 export default (state = initialState, action = {}) => {

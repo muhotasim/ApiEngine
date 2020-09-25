@@ -1,7 +1,6 @@
 const express = require("express");
-const fileUpload = require("express-fileupload");
 const app = express();
-const PORT = 9080;
+const PORT = 9090;
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 app.use(function(req, res, next) {
@@ -11,11 +10,5 @@ app.use(function(req, res, next) {
     next();
   });
 
-  app.use(fileUpload({
-    useTempFiles : true,
-    tempFileDir : '/tmp/'
-}));
-
-require("./databaseSDK/ApiEngine")(app);
-require("./databaseSDK/ApiController")(app);
+require("./controllers/AuthController")(app);
 app.listen(PORT);

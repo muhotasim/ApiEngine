@@ -4,4 +4,6 @@ module.exports = {
   password: '',
   database: 'api_engine',
   secret: 'secret',
+  accessTokenSecredKey:"test",
+  refressTokenSecredKey:"test2",
 };

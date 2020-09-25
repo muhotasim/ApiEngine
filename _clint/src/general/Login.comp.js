@@ -59,7 +59,7 @@ class Login extends React.Component {
                                     {this.state.error&&(
                                         <p className="alert alert-danger alert-sm">Please enter valid cordintial.</p>
                                     )}
-                                <Input inputlabel={"Your Name"} type="text" className="form-control" value={name}
+                                    <Input inputlabel={"Your Name"} type="text" className="form-control" value={name}
                                         onChange={(e) => {
                                             this._onChange(e, 'name')
                                         }}/>

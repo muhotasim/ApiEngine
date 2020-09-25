@@ -4,7 +4,7 @@ export const Input = (props) => {
     return (<React.Fragment>
         <div className="form-group">
             {props.inputlabel ? <label> {props.inputlabel} </label> : null}
-            <input {...props}/>
+            <input autoComplete={false} {...props}/>
         </div>
     </React.Fragment>);
 };

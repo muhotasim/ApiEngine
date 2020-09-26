@@ -1,8 +1,13 @@
 {
-  "presets": ["es2015", "react"],
-  "env": {
-    "development": {
-      "presets": ["react-hmre"]
-    }
-  }
+    "presets": [
+      "@babel/env",
+      "@babel/react",
+    ],
+    "plugins": [
+      "@babel/plugin-syntax-dynamic-import",
+      "@babel/plugin-proposal-class-properties",
+      "@babel/plugin-proposal-export-namespace-from",
+      "@babel/plugin-proposal-throw-expressions",
+      "react-hot-loader/babel"
+    ]
 }

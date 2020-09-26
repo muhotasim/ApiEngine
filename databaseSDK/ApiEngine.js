@@ -1,27 +1,28 @@
 
 var queryHolder = require("./index");
-
-// {
-//   status: "success",
-//   data:[],
-//   error:""
-// }
-
-
-
-/*
-[
-  {
-      name:"name",
-      type:"VARCHAR",
-      length:255
-  }
-]
-*/
+var config = require("../config");
+var jwt = require('jsonwebtoken'); 
+var accessTokenKey = config.accessTokenSecredKey;
 module.exports = (app)=>{
-
-  
-
+    app.use("/system/*",async (req,res,next)=>{
+    const authHeader = req.headers.authorization;
+    if(!authHeader) return res.sendStatus(403);
+    const token = authHeader.split(" ")[1];
+    if(!token ) return res.sendStatus(401);
+    const query = {};
+    query.from="tokens";
+    query.where=" WHERE token='"+token+"'";
+    query.count = true;
+    const tokenExists =await queryHolder.find(query);
+    if(tokenExists.count){
+      jwt.verify(token,accessTokenKey,(err,decoded)=>{
+        if(err) return res.sendStatus(401);
+        return next();
+      });
+    }else{
+      return res.sendStatus(401);
+    }
+    });
     app.post("/system/api-engine/delete", async (req,res)=>{
       const rawData =await queryHolder.findById("system_module_infromation",req.body.id);
       const d= await queryHolder.deleteTable(rawData.tableName);
@@ -32,7 +33,6 @@ module.exports = (app)=>{
         res.send({ status: "failed",data:[],error:"error" });
       }
     });
-
     app.post("/system/create-table",async (req,res)=>{
        const {tableName, displayName, query} = req.body;
        const d= await queryHolder.createTable(tableName, displayName, JSON.parse(query));
@@ -42,7 +42,6 @@ module.exports = (app)=>{
         res.send({ status: "failed",data:[],error:"error" });
       }
     });
-
     app.get("/system/edit-table/:id",async (req,res)=>{
       const id = req.params.id;
       const d= await queryHolder.findById("system_module_infromation", id);
@@ -72,7 +71,6 @@ module.exports = (app)=>{
        res.send({ status: "failed",data:[],error:"error" });
      }
     });
-
     app.post("/system/remove-column",async (req, res)=>{
       const { tableName ,columnName} = req.body;
       
@@ -104,6 +102,4 @@ module.exports = (app)=>{
         res.send({ status: "failed",data:[],error:"error" });
       }
     });
-
-
 }

@@ -61,12 +61,17 @@ module.exports = (app)=>{
         return res.sendStatus(401);
       }
     });
-    app.post('/refresh_token',(req, res)=>{
-        jwt.verify(req.body.refresh_token,refreshTokenKey,(err,decodeedData)=>{
+    app.post('/refresh_token', (req, res)=>{
+        jwt.verify(req.body.refresh_token,refreshTokenKey,async (err,decodeedData)=>{
           if(err) return res.send({ status: "failed", data: [] });
           const expiry = Math.floor(Date.now() / 1000) + (60 * 60);
           let token = jwt.sign({ exp: expiry, data: decodeedData.data }, accessTokenKey);
           let rfToken = jwt.sign({ data: decodeedData.data }, refreshTokenKey);
+
+          await queryHolder.insert("tokens",{
+            token:token,
+            user_id: decodeedData.id
+          });
           res.send({
               "token_type": "Bearer",
               "access_token": token,

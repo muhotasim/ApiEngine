@@ -1,5 +1,6 @@
 const path = require('path');
 const webpack = require('webpack');
+const TerserPlugin = require('terser-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const HtmlWebpackPluginConfig = new HtmlWebpackPlugin({
@@ -9,23 +10,20 @@ const HtmlWebpackPluginConfig = new HtmlWebpackPlugin({
 });
 
 module.exports = {
-    target: 'web', 
-    devServer: {
-        port: 3000,
-        contentBase: './dist',
-        hot:true
-    },
     entry: {
-        app: ['react-hot-loader/patch','./src/index.dev.jsx'],
+        app: ['./src/index.jsx'],
         vendor: ['react', 'react-dom']
     },
     output: {
         path: path.resolve(__dirname, 'dist'),
         filename: 'js/[name].bundle.js'
     },
-    devtool: 'source-map',
     resolve: {
         extensions: ['.js', '.jsx']
+    },
+    optimization: {
+        minimize: true,
+        minimizer: [new TerserPlugin()],
     },
     module: {
         rules: [
@@ -52,12 +50,14 @@ module.exports = {
         ]
     },
     plugins: [
+        new webpack.DefinePlugin({
+            'process.env.NODE_ENV': JSON.stringify('production')
+        }),
         new MiniCssExtractPlugin({
             filename: "styles.css",
             chunkFilename: "styles.css"
         }),
         HtmlWebpackPluginConfig,
-        new webpack.NoEmitOnErrorsPlugin(),
     ],
-    mode: 'development',
+    mode: 'production',
 }

@@ -52,7 +52,9 @@ class ServerApi {
             }
             
         }else{
+            if(failed){
              return failed(this);
+            }
         }
         };
         if(headers){
@@ -80,9 +82,9 @@ class ServerApi {
             xhttp.onerror(e=>{
                 failed(e);
             });
-            xhttp.ontimeout(e=>{
-                failed(e);
-            });
+            // xhttp.ontimeout(e=>{
+            //     failed(e);
+            // });
         }
         
     }

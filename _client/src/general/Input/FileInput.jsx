@@ -1,7 +1,7 @@
 import React from "react";
 const FileInput = props =>{
     return <>
-    <div>
+    <div className="input-group">
         <input type="file" onChange={e=>{
             if(e.target.files.length){
                 props.onChange(e.target.files[0]);
@@ -9,6 +9,7 @@ const FileInput = props =>{
                 props.onChange(null);
             }
         }} style={{display:"none"}}/>
+        
         {props.preview&&<div>
             <object data={props.value&& typeof props.value=="object"?URL.createObjectURL(props.value):props.value} style={{height:"100px",width:"100px"}}/></div>}
         <button style={props.style} onClick={e=>{

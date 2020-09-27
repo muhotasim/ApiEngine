@@ -7,6 +7,9 @@ const Tokens = lazy(()=>import("./Tokens"));
 const Users = lazy(()=>import("./Users"));
 const Modules = lazy(()=>import("./Modules"));
 
+const Navigation = lazy(()=>import("../general/UI/Navigation"));
+import menus from "../utils/menus";
+
 class App extends React.Component {
     
     constructor(props){
@@ -23,6 +26,7 @@ class App extends React.Component {
             <Suspense fallback={<span>Loading...</span>}>
                 <BrowserRouter >
                     <Switch>
+                        <Navigation menus={menus}/>
                         <Route exact component={Dashboard} path="/"/>
                         <Route exact component={Dashboard} path="/Dashboard"/>
                         <Route exact component={Tokens} path="/Tokens"/>
